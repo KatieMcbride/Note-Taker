@@ -11,6 +11,7 @@ var express = require("express");
 var app = express();
 const path = require("path");
 var PORT = process.env.PORT || 3000;
+var fs = require('fs');
 
 //set up the express app to handle data parsing
 app.use(express.urlencoded({ extend : true }));
@@ -18,6 +19,9 @@ app.use(express.json());
 
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
+
+var allNotes = fs.readFileSync('./../db/db.json', 'utf8');
+console.log(allNotes);
 
 // Routes
 // ===========================================================
@@ -34,13 +38,14 @@ app.get("/notes", function(req, res) {
 
 // Get all the data
 var getNotes = app.get('/api/notes', (req, res) =>{
-    return res.json(data);
+    return res.json(allNotes);
 });
 
 // A function for getting all notes from the db  
 // var getNotes = function() {
 //   return $.ajax({
 //     url: "/api/notes",
+//     data: ("./../db/db.json"),
 //     method: "GET"
 //   });
 // };
