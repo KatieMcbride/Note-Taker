@@ -21,7 +21,7 @@ app.use(express.json());
 var activeNote = {};
 
 var allNotes = fs.readFileSync('./../db/db.json', 'utf8');
-console.log(allNotes);
+// console.log(allNotes);
 
 // Routes
 // ===========================================================
@@ -45,20 +45,23 @@ var getNotes = app.get('/api/notes', (req, res) =>{
 // var getNotes = function() {
 //   return $.ajax({
 //     url: "/api/notes",
-//     data: ("./../db/db.json"),
 //     method: "GET"
 //   });
 // };
 
+var saveNote = app.post('/api/notes', (req, res) =>{
+    const newNote = req.body;
+    console.log(newNote);
+});    
 
 // A function for saving a note to the db
-var saveNote = function(note) {
-  return $.ajax({
-    url: "/api/notes",
-    data: note,
-    method: "POST"
-  });
-};
+// var saveNote = function(note) {
+//   return $.ajax({
+//     url: "/api/notes",
+//     data: note,
+//     method: "POST"
+//   });
+// };
 
 // A function for deleting a note from the db
 var deleteNote = function(id) {
