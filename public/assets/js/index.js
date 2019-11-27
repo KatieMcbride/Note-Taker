@@ -1,16 +1,35 @@
 // Dependencies
 // ===========================================================
+// var express = require("express");
+// var app = express();
+// const path = require("path");
 
-var $noteTitle = $(".note-title");
-var $noteText = $(".note-textarea");
-var $saveNoteBtn = $(".save-note");
-var $newNoteBtn = $(".new-note");
-var $noteList = $(".list-container .list-group");
+// var $noteTitle = $(".note-title");
+// var $noteText = $(".note-textarea");
+// var $saveNoteBtn = $(".save-note");
+// var $newNoteBtn = $(".new-note");
+// var $noteList = $(".list-container .list-group");
 
 
 
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
+
+
+var express = require("express");
+var app = express();
+const path = require("path");
+var PORT = process.env.PORT || 3000;
+var fs = require('fs');
+var index = require("./index");
+
+//set up the express app to handle data parsing
+app.use(express.urlencoded({ extend : true }));
+app.use(express.json());
+app.use(express.static("public"));
+
+
+
 
 
 
@@ -19,13 +38,36 @@ var activeNote = {};
 
 //General Route
 app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '../../index.html'));
 });
 
 //Notes Route
 app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, 'notes.html'));
+    res.sendFile(path.join(__dirname, '../../notes.html'));
   });
+
+  var allNotes = fs.readFile('db.json', 'utf8',(err) => {
+    console.log('Data saved to db.json file');
+});
+console.log(allNotes);
+
+
+// Get all the data
+app.get('/api/notes', (req, res) =>{
+    return res.json(allNotes);
+});
+
+// POST data
+app.post('/api/notes', (req, res) => {
+    console.log("Note received");
+    console.log(req.body);
+    const dataToPost = JSON.stringify(req.body);
+    fs.appendFileSync('../../../db/db.json',",\n" + dataToPost);
+    // fs.appendFile('db.json', dataToPost, (err) => {
+    //     console.log('Data saved to db.json file');
+    // });
+    res.send("Thank you!");
+}); 
 
 
 
@@ -155,14 +197,21 @@ var getAndRenderNotes = function() {
   });
 };
 
-$saveNoteBtn.on("click", handleNoteSave);
-$noteList.on("click", ".list-group-item", handleNoteView);
-$newNoteBtn.on("click", handleNewNoteView);
-$noteList.on("click", ".delete-note", handleNoteDelete);
-$noteTitle.on("keyup", handleRenderSaveBtn);
-$noteText.on("keyup", handleRenderSaveBtn);
+// $saveNoteBtn.on("click", handleNoteSave);
+// $noteList.on("click", ".list-group-item", handleNoteView);
+// $newNoteBtn.on("click", handleNewNoteView);
+// $noteList.on("click", ".delete-note", handleNoteDelete);
+// $noteTitle.on("keyup", handleRenderSaveBtn);
+// $noteText.on("keyup", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
-getAndRenderNotes();
+// getAndRenderNotes();
 
+
+
+// Listener
+// ===========================================================
+app.listen(PORT, function() {
+  console.log("App listening on PORT " + PORT);
+});
 
