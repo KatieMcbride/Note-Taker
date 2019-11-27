@@ -1,27 +1,18 @@
 // Dependencies
 // ===========================================================
 
-// var $noteTitle = $(".note-title");
-// var $noteText = $(".note-textarea");
-// var $saveNoteBtn = $(".save-note");
-// var $newNoteBtn = $(".new-note");
-// var $noteList = $(".list-container .list-group");
+var $noteTitle = $(".note-title");
+var $noteText = $(".note-textarea");
+var $saveNoteBtn = $(".save-note");
+var $newNoteBtn = $(".new-note");
+var $noteList = $(".list-container .list-group");
 
-var express = require("express");
-var app = express();
-const path = require("path");
-var PORT = process.env.PORT || 3000;
-var fs = require('fs');
 
-//set up the express app to handle data parsing
-app.use(express.urlencoded({ extend : true }));
-app.use(express.json());
 
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
 
-var allNotes = fs.readFileSync('./../db/db.json', 'utf8');
-// console.log(allNotes);
+
 
 // Routes
 // ===========================================================
@@ -36,32 +27,25 @@ app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, 'notes.html'));
   });
 
-// Get all the data
-var getNotes = app.get('/api/notes', (req, res) =>{
-    return res.json(allNotes);
-});
+
 
 // A function for getting all notes from the db  
-// var getNotes = function() {
-//   return $.ajax({
-//     url: "/api/notes",
-//     method: "GET"
-//   });
-// };
-
-var saveNote = app.post('/api/notes', (req, res) =>{
-    const newNote = req.body;
-    console.log(newNote);
-});    
+var getNotes = function() {
+  return $.ajax({
+    url: "/api/notes",
+    method: "GET"
+  });
+};
+  
 
 // A function for saving a note to the db
-// var saveNote = function(note) {
-//   return $.ajax({
-//     url: "/api/notes",
-//     data: note,
-//     method: "POST"
-//   });
-// };
+var saveNote = function(note) {
+  return $.ajax({
+    url: "/api/notes",
+    data: note,
+    method: "POST"
+  });
+};
 
 // A function for deleting a note from the db
 var deleteNote = function(id) {
@@ -171,19 +155,14 @@ var getAndRenderNotes = function() {
   });
 };
 
-// $saveNoteBtn.on("click", handleNoteSave);
-// $noteList.on("click", ".list-group-item", handleNoteView);
-// $newNoteBtn.on("click", handleNewNoteView);
-// $noteList.on("click", ".delete-note", handleNoteDelete);
-// $noteTitle.on("keyup", handleRenderSaveBtn);
-// $noteText.on("keyup", handleRenderSaveBtn);
+$saveNoteBtn.on("click", handleNoteSave);
+$noteList.on("click", ".list-group-item", handleNoteView);
+$newNoteBtn.on("click", handleNewNoteView);
+$noteList.on("click", ".delete-note", handleNoteDelete);
+$noteTitle.on("keyup", handleRenderSaveBtn);
+$noteText.on("keyup", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
-// getAndRenderNotes();
+getAndRenderNotes();
 
 
-// Listener
-// ===========================================================
-app.listen(PORT, function() {
-    console.log("App listening on PORT " + PORT);
-  });
