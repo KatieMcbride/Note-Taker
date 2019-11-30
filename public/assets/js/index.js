@@ -22,6 +22,7 @@ const path = require("path");
 var PORT = process.env.PORT || 3000;
 var fs = require('fs');
 var index = require("./index");
+lastID = 1;
 
 //set up the express app to handle data parsing
 app.use(express.urlencoded({ extend : true }));
@@ -65,11 +66,11 @@ app.get('/api/notes', (req, res) =>{
  
 // POST data
 app.post('/api/notes', (req, res) => {
-  lastID = 1;
+  objectID = lastID++;
     console.log("Note received");
     console.log(req.body);
     const dataToPost = JSON.stringify(req.body);
-    fs.appendFileSync('../../../db/db.json',",\n" + lastID++ + dataToPost);
+    fs.appendFileSync('../../../db/db.json',",\n" + objectID + dataToPost);
     // fs.appendFile('db.json', dataToPost, (err) => {
     //     console.log('Data saved to db.json file');
     // });
