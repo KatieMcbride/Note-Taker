@@ -33,6 +33,11 @@ app.use(express.static("public"));
 
 
 
+
+// createID(){
+//     return String.valueOf(idCounter++);
+// }; 
+
 // Routes
 // ===========================================================
 
@@ -44,9 +49,9 @@ app.get("/", function(req, res) {
 //Notes Route
 app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, '../../notes.html'));
-  });
+});
 
-  var allNotes = fs.readFile('db.json', 'utf8',(err) => {
+var allNotes = fs.readFile('db.json', 'utf8',(err) => {
     console.log('Data saved to db.json file');
 });
 console.log(allNotes);
@@ -57,12 +62,14 @@ app.get('/api/notes', (req, res) =>{
     return res.json(allNotes);
 });
 
+ 
 // POST data
 app.post('/api/notes', (req, res) => {
+  lastID = 1;
     console.log("Note received");
     console.log(req.body);
     const dataToPost = JSON.stringify(req.body);
-    fs.appendFileSync('../../../db/db.json',",\n" + dataToPost);
+    fs.appendFileSync('../../../db/db.json',",\n" + lastID++ + dataToPost);
     // fs.appendFile('db.json', dataToPost, (err) => {
     //     console.log('Data saved to db.json file');
     // });
@@ -206,6 +213,8 @@ var getAndRenderNotes = function() {
 
 // Gets and renders the initial list of notes
 // getAndRenderNotes();
+
+
 
 
 
