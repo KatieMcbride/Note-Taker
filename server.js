@@ -1,36 +1,47 @@
-var express = require("express");
-var app = express();
+const express = require("express");
+const app = express();
 const path = require("path");
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 8000;
 var fs = require('fs');
-var index = require("./index");
+// var css = require("./public/assets/css");
+// var index = require("./public/index.html")
 lastID = 1;
+// const router = require('express').Router();
 
 //set up the express app to handle data parsing
 app.use(express.urlencoded({ extend : true }));
 app.use(express.json());
 app.use(express.static("public"));
-
+app.use("/", htmlRoutes);
+app.use("/api", apiRoutes);
 
 //General Route
+// router.get('/',(req,res) =>{
+//     res.sendFile(path.join(__dirname, './public/index.html'));
+// });
+
+
 app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, '../../index.html'));
+    res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
 //Notes Route
-app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, '../../notes.html'));
-});
+// app.get("/notes", function(req, res) {
+//     res.sendFile(path.join(__dirname, './public/notes.html'));
+// });
 
 
 // Get all the data
-var allNotes = fs.readFile('db.json', 'utf8',(err) => {
+var allNotes = fs.readFile('/db/db.json','utf8',(err, data) => {
     console.log('Data saved to db.json file');
+    // console.log(data);
+    return(data);
 });
+
 console.log(allNotes);
 
 app.get('/api/notes', (req, res) =>{
-    return res.json(allNotes);
+    res.json(allNotes);
 });  
 
 // POST data
@@ -39,7 +50,7 @@ app.post('/api/notes', (req, res) => {
       console.log("Note received");
       console.log(req.body);
       const dataToPost = JSON.stringify(req.body);
-      fs.appendFileSync('../../../db/db.json',",\n" + objectID + dataToPost);
+      fs.appendFileSync('/db/db.json',",\n" + objectID + dataToPost);
       // fs.appendFile('db.json', dataToPost, (err) => {
       //     console.log('Data saved to db.json file');
       // });
