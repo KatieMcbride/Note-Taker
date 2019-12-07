@@ -16,23 +16,21 @@ router.get('/notes', (req, res) => {
 
 // POST notes
 router.post('/notes', (req, res) => {
-    var readStream = fs.createReadStream(path.join(__dirname, '/db.json'), 'utf8');
-    let data = ''
-    readStream.on('data', function(chunk) {
-        data += chunk;
-    }).on('end', function() {
+    fs.readFile(path.join(__dirname, '../db.json'), 'utf8', (err,data)  => {
         /* convert json data to array */
         let notes = JSON.parse(data);
+        console.log(data);
         let newNote = req.body;
         notes.push(newNote);
+        
         /* use normal write file to save to db.json */
-        fs.writeFile(__dirname + '../db.json', JSON.stringify(notes), (err) => {
-          if (err) throw err;
+        fs.writeFile(path.join(__dirname, '../db.json'), JSON.stringify(notes), (err) => {
+          if (err) console.log(err);
           console.log('note saved');
         });
       });
+      res.send('post sent');
   });
-
 // router.post('/notes', (req, res) => {
 //     const newNote = req.body;
 //     fs.readFile('db.json', 'utf8').then(notes => {
