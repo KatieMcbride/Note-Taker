@@ -1,19 +1,4 @@
 {
 	"title":"Test Title",
 	"text":"test text"
-},
-{"title":"TEST 4","text":"note note note"},
-{"title":"TEST 6","text":"note note note"}1,
-null,
-{"title":"TEST 8","text":"note note note"}id: ${lastID++},
-{"title":"TEST 9","text":"note note note"}1,
-1{"title":"TEST 10","text":"note note note"},
-1{"title":"TEST 11","text":"note note note"},
-1{"title":"TEST 12","text":"note note note"},
-1{"title":"TEST 13","text":"note note note"},
-1{"title":"TEST 14","text":"note note note"},
-1{"title":"TEST 15","text":"note note note"},
-2{"title":"TEST 16","text":"note note note"},
-3{"title":"TEST 17","text":"note note note"},
-1{"title":"TEST 18","text":"note note note"},
-1{"title":"TEST 19","text":"note note note"}
+}
