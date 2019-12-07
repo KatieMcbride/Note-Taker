@@ -9,7 +9,6 @@ router.get('/notes', (req, res) => {
   readStream.on('data', function(chunk) {
       data += chunk;
   }).on('end', function() {
-      console.log(data);
       res.json(JSON.parse(data));
     });
 });
@@ -29,12 +28,9 @@ router.post('/notes', (req, res) => {
         } 
         else {
             oldNote.id = notes[notes.length - 1].id;
-            console.log(oldNote.id);
-            
             newNote.id = oldNote.id +1;
         }
         notes.push(newNote);
-        console.log(notes);
         
         /* use normal write file to save to db.json */
         fs.writeFile(path.join(__dirname, '../db.json'), JSON.stringify(notes), (err) => {
@@ -43,28 +39,21 @@ router.post('/notes', (req, res) => {
         });
       });
       res.send('post sent');
-  });
+});
 
-//   // POST data
-// app.post('/api/notes', (req, res) => {
-//     objectID = lastID++;
-//       console.log("Note received");
-//       console.log(req.body);
-//       const dataToPost = JSON.stringify(req.body);
-//       fs.appendFileSync('/db/db.json',",\n" + objectID + dataToPost);
-//       // fs.appendFile('db.json', dataToPost, (err) => {
-//       //     console.log('Data saved to db.json file');
-//       // });
-//       res.send("Thank you!");
-//   }); 
   
-// // DELETE data by ID
-// app.post("/api/notes/:id", function(req, res) {
-//     id = objectID;
-//     id.delete();
-  
-//     res.json('Deleted note');
-//   });
+// DELETE data by ID
+router.delete("/notes/:id", function(req, res) {
+    fs.readFile(path.join(__dirname, '../db.json'), 'utf8', (err,data)  => {
+        const parsedNotes = JSON.parse(data);
+        const modifiedData = parsedNotes.filter(x => x.id !== parseInt(req.params.id));
+    fs.writeFile(path.join(__dirname, '../db.json'), JSON.stringify(modifiedData), (err) => {
+        if (err) console.log(err);
+        console.log('note saved');
+        });
+    });
+    res.send('post sent');
+});
 
 
 
