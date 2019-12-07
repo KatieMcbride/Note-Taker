@@ -17,11 +17,24 @@ router.get('/notes', (req, res) => {
 // POST notes
 router.post('/notes', (req, res) => {
     fs.readFile(path.join(__dirname, '../db.json'), 'utf8', (err,data)  => {
+
         /* convert json data to array */
-        let notes = JSON.parse(data);
-        console.log(data);
+        const notes = JSON.parse(data);
+        let oldNote = {};
         let newNote = req.body;
+
+        // If array is empty then make first note with ID of 1
+        if(notes.length == 0){
+            newNote.id = 1;
+        } 
+        else {
+            oldNote.id = notes[notes.length - 1].id;
+            console.log(oldNote.id);
+            
+            newNote.id = oldNote.id +1;
+        }
         notes.push(newNote);
+        console.log(notes);
         
         /* use normal write file to save to db.json */
         fs.writeFile(path.join(__dirname, '../db.json'), JSON.stringify(notes), (err) => {
@@ -31,31 +44,27 @@ router.post('/notes', (req, res) => {
       });
       res.send('post sent');
   });
-// router.post('/notes', (req, res) => {
-//     const newNote = req.body;
-//     fs.readFile('db.json', 'utf8').then(notes => {
-//         notes.push(newNote);
-//         fs.writeFile('db.json', JSON.stringify(notes), function(err, result) {
-//             if(err) console.log('error', err);
-//     });
 
-    
-    // notes.push(newNote);
-    // fs.writeFile('db.json', JSON.stringify(notes), function(err, result) {
-    //     if(err) console.log('error', err);
-    //   });
-
-    // objectID = lastID++;
-    //   console.log(req.body);
-    //   const dataToPost = JSON.stringify(req.body);
-    //   fs.appendFileSync('../public/assets/js/db.json',",\n" + dataToPost);
-    //   fs.appendFile('db.json',",\n" + dataToPost, (err) => {
-    //     if (err) throw err;
-    //     console.log('Data saved to db.json file');
-    //   });
-    //   res.send("Thank you!");
+//   // POST data
+// app.post('/api/notes', (req, res) => {
+//     objectID = lastID++;
+//       console.log("Note received");
+//       console.log(req.body);
+//       const dataToPost = JSON.stringify(req.body);
+//       fs.appendFileSync('/db/db.json',",\n" + objectID + dataToPost);
+//       // fs.appendFile('db.json', dataToPost, (err) => {
+//       //     console.log('Data saved to db.json file');
+//       // });
+//       res.send("Thank you!");
 //   }); 
-// }); 
+  
+// // DELETE data by ID
+// app.post("/api/notes/:id", function(req, res) {
+//     id = objectID;
+//     id.delete();
+  
+//     res.json('Deleted note');
+//   });
 
 
 
